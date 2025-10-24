@@ -1,0 +1,33 @@
+# Unity-generated folders
+Library/
+Logs/
+Temp/
+Obj/
+Build/
+Builds/
+UserSettings/
+MemoryCaptures/
+CrashReports/
+
+# Unity license and cache
+UnityLicense.ulf
+
+# Visual Studio cache and settings
+.vs/
+.vscode/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+
+# OS-generated files
+.DS_Store
+Thumbs.db
