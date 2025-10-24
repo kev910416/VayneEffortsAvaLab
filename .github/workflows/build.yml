@@ -15,32 +15,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Кэш Unity Library
-      - name: Cache Library
-        uses: actions/cache@v4
-        with:
-          path: Library
-          key: Library-${{ runner.os }}-${{ hashFiles('**/Packages/packages-lock.json') }}
-          restore-keys: |
-            Library-${{ runner.os }}-
+      - name: Install Unity License CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
+          echo "Unity activation tools ready."
 
-      # ✅ Активация Unity
-      - name: Activate Unity
-        uses: game-ci/unity-activate@v2
-        with:
-          unityVersion: 2022.3.21f1
+      # ✅ Активация Unity без Docker
+      - name: Activate Unity License
+        run: |
+          echo "$UNITY_LICENSE" > UnityLicense.ulf
+          echo "✅ Unity license written to file."
         env:
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
-      # 🏗️ Сборка Windows 64 (через стабильный контейнер)
+      # 🏗️ Сборка Windows
       - name: Build Windows 64
         uses: game-ci/unity-builder@v4
         with:
           targetPlatform: StandaloneWindows64
           unityVersion: 2022.3.21f1
-          dockerImage: unityci/editor:ubuntu-2022.3.21f1-windows-mono-3.1.0   # ✅ рабочий контейнер
+          dockerImage: unityci/editor:ubuntu-2022.3.21f1-windows-mono-3.1.0   # ✅ стабильный образ
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
