@@ -1,4 +1,4 @@
-name: Unity Windows Build
+name: Build Windows Executables
 
 on:
   workflow_dispatch:
@@ -6,42 +6,28 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-windows64:
-    name: Build Windows (x64)
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
+  build:
+    name: Build Windows 64-bit
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Unity License CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl
-          echo "Unity activation tools ready."
-
-      # ✅ Активация Unity без Docker
-      - name: Activate Unity License
-        run: |
-          echo "$UNITY_LICENSE" > UnityLicense.ulf
-          echo "✅ Unity license written to file."
+      - name: Activate Unity
+        uses: game-ci/unity-activate@v3
         env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
-      # 🏗️ Сборка Windows
-      - name: Build Windows 64
+      - name: Build Project
         uses: game-ci/unity-builder@v4
         with:
           targetPlatform: StandaloneWindows64
-          unityVersion: 2022.3.21f1
-          dockerImage: unityci/editor:ubuntu-2022.3.21f1-windows-mono-3.1.0   # ✅ стабильный образ
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
-      # 📦 Загрузка результата
-      - name: Upload build
+      - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: VayneEffortsAvaLab-Windows64
-          path: build/StandaloneWindows64
+          name: WindowsBuild
+          path: build/
