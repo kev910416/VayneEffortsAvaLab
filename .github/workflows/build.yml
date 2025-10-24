@@ -8,23 +8,20 @@ on:
 jobs:
   build:
     name: Build Windows 64-bit
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Activate Unity
-        uses: game-ci/unity-activate@v3
+      - name: Build with Unity
+        uses: game-ci/unity-builder@v4
+        with:
+          targetPlatform: StandaloneWindows64
         env:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-
-      - name: Build Project
-        uses: game-ci/unity-builder@v4
-        with:
-          targetPlatform: StandaloneWindows64
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
