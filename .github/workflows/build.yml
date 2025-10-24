@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Кэш Unity Library (ускоряет повторные сборки)
+      # Кэш Unity Library
       - name: Cache Library
         uses: actions/cache@v4
         with:
@@ -34,12 +34,13 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
-      # 🏗️ Сборка Windows 64
+      # 🏗️ Сборка Windows 64 (через стабильный контейнер)
       - name: Build Windows 64
         uses: game-ci/unity-builder@v4
         with:
           targetPlatform: StandaloneWindows64
           unityVersion: 2022.3.21f1
+          dockerImage: unityci/editor:ubuntu-2022.3.21f1-windows-mono-3.1.0   # ✅ рабочий контейнер
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
