@@ -31,4 +31,14 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           projectPath: .
-          unityV
+          unityVersion: 2022.3.21f1
+          targetPlatform: StandaloneWindows64
+          buildName: VayneEffortsAvaLab
+          buildPath: build/StandaloneWindows64
+          customParameters: "-screen-width 1920 -screen-height 1080"
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: WindowsBuild
+          path: build/StandaloneWindows64
